@@ -1,0 +1,7 @@
+#Fri Mar 25 14:14:47 CST 2022
+base.0=E\:\\develop\\android\\yf\\CamcodecAS\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\1
+path.1=classes.dex
+renamed.1=classes2.dex
+path.0=classes.dex
+renamed.0=classes.dex
+base.1=E\:\\develop\\android\\yf\\CamcodecAS\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
