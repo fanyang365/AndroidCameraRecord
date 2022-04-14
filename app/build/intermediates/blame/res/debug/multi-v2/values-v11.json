@@ -1,17 +1,17 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\develop\\android\\yf\\CamcodecAS\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
+            "outputFile": "D:\\ASProject\\AndroidCameraRecord\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v11\\values-v11.xml",
             "map": [
                 {
-                    "source": "E:\\develop\\android\\yf\\CamcodecAS\\app\\src\\main\\res\\values-v11\\styles.xml",
+                    "source": "D:\\ASProject\\AndroidCameraRecord\\app\\src\\main\\res\\values-v11\\styles.xml",
                     "from": {
                         "startLines": "6",
                         "startColumns": "4",
-                        "startOffsets": "177",
+                        "startOffsets": "183",
                         "endLines": "8",
                         "endColumns": "12",
-                        "endOffsets": "309"
+                        "endOffsets": "317"
                     },
                     "to": {
                         "startLines": "2",

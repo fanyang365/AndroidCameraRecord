@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\develop\\android\\yf\\CamcodecAS\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hu\\values-hu.xml",
+            "outputFile": "D:\\ASProject\\AndroidCameraRecord\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hu\\values-hu.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0-rc01.aar\\5825af3ca20348d2af35a54df93c6ab0\\res\\values-hu\\values-hu.xml",
+                    "source": "D:\\Users\\yangfan\\.gradle\\caches\\transforms-1\\files-1.1\\core-1.1.0-rc01.aar\\069b97448ee61c6f5d95db3d690f0475\\res\\values-hu\\values-hu.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Administrator\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.1.0-rc01.aar\\de024f5823f3b9e002dedec8247842a0\\res\\values-hu\\values-hu.xml",
+                    "source": "D:\\Users\\yangfan\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-1.1.0-rc01.aar\\1811c6145b7054f792aaf22499d1edaa\\res\\values-hu\\values-hu.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",

@@ -2,11 +2,15 @@
   <library name="Gradle: androidx.camera:camera-core:1.0.0-alpha04@aar">
     <ANNOTATIONS>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/camera-core-1.0.0-alpha04.aar/805ace1661dee2e6c38961870af6db05/annotations.zip!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/camera-core-1.0.0-alpha04.aar/d633dd999c6c68d9a53fdc44f80b5923/annotations.zip!/" />
     </ANNOTATIONS>
     <CLASSES>
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/camera-core-1.0.0-alpha04.aar/805ace1661dee2e6c38961870af6db05/jars/classes.jar!/" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/camera-core-1.0.0-alpha04.aar/805ace1661dee2e6c38961870af6db05/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/camera-core-1.0.0-alpha04.aar/805ace1661dee2e6c38961870af6db05/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/camera-core-1.0.0-alpha04.aar/d633dd999c6c68d9a53fdc44f80b5923/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/camera-core-1.0.0-alpha04.aar/d633dd999c6c68d9a53fdc44f80b5923/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/camera-core-1.0.0-alpha04.aar/d633dd999c6c68d9a53fdc44f80b5923/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

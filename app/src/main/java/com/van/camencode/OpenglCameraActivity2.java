@@ -76,9 +76,9 @@ public class OpenglCameraActivity2 extends Activity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnCameraFacing:
-//                cameraSurface.cameraFacingChanged();
-                Intent intent = new Intent(OpenglCameraActivity2.this, WellcomActivity.class);
-                startActivity(intent);
+                cameraSurface.cameraFacingChanged();
+//                Intent intent = new Intent(OpenglCameraActivity2.this, WellcomActivity.class);
+//                startActivity(intent);
                 break;
             case R.id.btnRecord:
                 record();
