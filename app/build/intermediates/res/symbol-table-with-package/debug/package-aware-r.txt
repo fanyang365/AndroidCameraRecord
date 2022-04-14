@@ -706,6 +706,7 @@ id content
 id contentPanel
 id custom
 id customPanel
+id decodeSurface
 id decor_content_parent
 id default_activity_button
 id dialog_button

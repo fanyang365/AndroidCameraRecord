@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Thu Apr 14 16:46:23 CST 2022
+#Thu Apr 14 16:53:54 CST 2022
 1.base=D\:\\ASProject\\AndroidCameraRecord\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
 0.baseType=DIRECTORY
 1.baseType=DIRECTORY

@@ -79,7 +79,8 @@ public class AvcDecoder {
 	    	if (m_is_surface_view == false)
 	    	{
 		        ByteBuffer outputBuffer = outputBuffers[outputBufferIndex];
-		        outputBuffer.get(output, out_offset, bufferInfo.size);
+		        if (output != null)
+		        	outputBuffer.get(output, out_offset, bufferInfo.size);
 		        len = bufferInfo.size ;
 		        mMediaCodec.releaseOutputBuffer(outputBufferIndex, false);
 	    	}

@@ -1,5 +1,6 @@
 package com.van.opengl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -16,6 +17,7 @@ import com.van.opengl.filter.RecordFilter;
 import com.van.opengl.filter.SoulFilter;
 import com.van.opengl.filter.SplitFilter;
 import com.van.opengl.filter.WaterFilter;
+import com.van.util.Camera2Helper;
 import com.van.util.CameraAbstract;
 import com.van.util.CameraHelper;
 import com.van.util.ICameraData;
@@ -36,7 +38,7 @@ public class CameraSurface extends GLSurfaceView implements GLSurfaceView.Render
     private static final String TAG = "CameraSurface";
     private Context      mContext;
     private ICameraData cameraDataLinstener;
-    private CameraHelper cameraHelper;
+    private Camera2Helper cameraHelper;
     private  int[] textures;
     private SurfaceTexture mSurfaceTexture;
     private float[] mTransformMatrix = new float[16];
@@ -51,17 +53,23 @@ public class CameraSurface extends GLSurfaceView implements GLSurfaceView.Render
     private OpenGLMediaRecorder mediaRecorder;
     private boolean     isCreated;
 
+    private OpenGLAVCEncoder.EncoderListener encoderListener;
+
+    public void setAVCEncoderLinstener(OpenGLAVCEncoder.EncoderListener encoderListener){
+        this.encoderListener    = encoderListener;
+    }
+
     public CameraSurface(Context context) {
         super(context);
         mContext    = context;
         //默认参数
-        cameraHelper    = new CameraHelper(mContext
-                , CameraHelper.VIDEO_HARDWARE_ENCODE
-                , 4096
-                , 0
-                , Camera.CameraInfo.CAMERA_FACING_BACK
-                , CameraAbstract.VIDEO_DEFINITION_1080P);
-//        cameraHelper    = new Camera2Helper((Activity) context);
+//        cameraHelper    = new CameraHelper(mContext
+//                , CameraHelper.VIDEO_HARDWARE_ENCODE
+//                , 1080
+//                , 0
+//                , Camera.CameraInfo.CAMERA_FACING_BACK
+//                , CameraAbstract.VIDEO_DEFINITION_1080P);
+        cameraHelper    = new Camera2Helper((Activity) context);
 
     }
     public CameraSurface(Context context, CameraHelper cameraHelper){
@@ -131,8 +139,11 @@ public class CameraSurface extends GLSurfaceView implements GLSurfaceView.Render
                 EGL14.eglGetCurrentContext(),
                 cameraHelper.getCamera_video_width(),
                 cameraHelper.getCamera_video_height());
+        if (encoderListener != null){
+            glavcEncoder.setEncoderListener(encoderListener);
+        }
         //设置最大码率
-        glavcEncoder.setmBitrate(8192);
+        glavcEncoder.setmBitrate(4096);
         startEncode();
         Log.d("CameraGLSurface", "当前EGL上下文=" + EGL14.eglGetCurrentContext());
     }
@@ -169,7 +180,7 @@ public class CameraSurface extends GLSurfaceView implements GLSurfaceView.Render
 
 //        id = splitFilter.onDraw(id);
 //        id      = soulFilter.onDraw(id, false);
-        id      = waterFilter.onDraw(id, false);
+//        id      = waterFilter.onDraw(id, false);
 //        id      = beautyFilter.onDraw(id, false);+
         long timeSlamp  = System.nanoTime();
         //拿到fbo引用，开始编码
@@ -187,14 +198,14 @@ public class CameraSurface extends GLSurfaceView implements GLSurfaceView.Render
         //刷新数据
         requestRender();
 
-        long		current_time_stamp = System.currentTimeMillis();
-        m_preview_rate++;
-        if ((current_time_stamp-m_last_time_stamp) >= 1000)
-        {
-            Log.i("Test", "当前帧率="+m_preview_rate+" ,timestamp="+current_time_stamp+",时间差:"+(current_time_stamp-m_last_time_stamp));
-            m_last_time_stamp 	= current_time_stamp;
-            m_preview_rate		= 0;
-        }
+//        long		current_time_stamp = System.currentTimeMillis();
+//        m_preview_rate++;
+//        if ((current_time_stamp-m_last_time_stamp) >= 1000)
+//        {
+//            Log.i("Test", "当前帧率="+m_preview_rate+" ,timestamp="+current_time_stamp+",时间差:"+(current_time_stamp-m_last_time_stamp));
+//            m_last_time_stamp 	= current_time_stamp;
+//            m_preview_rate		= 0;
+//        }
     }
 
 

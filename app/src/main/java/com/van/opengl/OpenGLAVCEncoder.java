@@ -37,6 +37,22 @@ public class OpenGLAVCEncoder {
     private boolean isStart;
     private long startTime;
 
+    private boolean     isWriteFile = false;
+
+    private EncoderListener encoderListener;
+
+    public interface EncoderListener{
+        void onH264Data(byte[] data);
+    }
+
+    public EncoderListener getEncoderListener() {
+        return encoderListener;
+    }
+
+    public void setEncoderListener(EncoderListener encoderListener) {
+        this.encoderListener = encoderListener;
+    }
+
     public OpenGLAVCEncoder(Context context, EGLContext glContext, int width, int
             height) {
         mContext = context.getApplicationContext();
@@ -126,11 +142,19 @@ public class OpenGLAVCEncoder {
                 // 微妙转为毫秒
                 startTime = bufferInfo.presentationTimeUs / 1000;
             }
-            if (h264InputStream == null){
-                h264InputStream = new WriteFileUtil(recordH264Path);
-                h264InputStream.createfile();
+
+            if (isWriteFile){
+                if (h264InputStream == null){
+                    h264InputStream = new WriteFileUtil(recordH264Path);
+                    h264InputStream.createfile();
+                }
+                h264InputStream.writeFile(outData);
             }
-            h264InputStream.writeFile(outData);
+
+            if (encoderListener != null){
+                encoderListener.onH264Data(outData);
+            }
+
 //                包含   分隔符
             mMediaCodec.releaseOutputBuffer(index, false);
         }else if (index == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED){
