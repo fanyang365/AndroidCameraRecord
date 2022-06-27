@@ -18,6 +18,8 @@ app/build
 bin/
 gen/
 out/
+app/release
+app/debug
 app/src/main/cpp/ncnn-20220420-android-vulkan
 app/src/main/cpp/OpenCV-android-sdk
 
@@ -26,6 +28,7 @@ app/src/main/cpp/OpenCV-android-sdk
 
 # Gradle files
 .gradle/
+.idea/
 build/
 
 # Local configuration file (sdk path, etc)

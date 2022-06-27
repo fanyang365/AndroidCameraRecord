@@ -29,7 +29,7 @@ public class OpenGLAVCEncoder {
     /*I帧间隔*/
     private int         mIFrameInterval    = 3;
     /*帧率*/
-    private int         mKeyFramRate    = 30;
+    private int         mKeyFramRate    = 25;
     private EGLEnv      eglEnv;
     private MediaCodec  mMediaCodec;
     private Surface     mSurface;
@@ -42,7 +42,8 @@ public class OpenGLAVCEncoder {
     private EncoderListener encoderListener;
 
     public interface EncoderListener{
-        void onH264Data(byte[] data);
+        void onH264Data(ByteBuffer buffer, MediaCodec.BufferInfo info);
+        void onMediaFormatChanged(MediaFormat mediaFormat);
     }
 
     public EncoderListener getEncoderListener() {
@@ -112,9 +113,13 @@ public class OpenGLAVCEncoder {
         mHandler.post(new Runnable() {
             public void run() {
 //                opengl   能 1  不能2  draw  ---》surface
+
                 eglEnv.draw(textureId,timestamp);
 //                获取对应的数据
+//                long time1  = System.currentTimeMillis();
                 codec(false);
+//                long time2  = System.currentTimeMillis();
+//                Log.d(TAG, "编码耗时 = " + (time2 - time1));
             }
         });
 
@@ -130,41 +135,46 @@ public class OpenGLAVCEncoder {
         if (endOfStream) {
             mMediaCodec.signalEndOfInputStream();
         }
+
         MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
         int index = mMediaCodec.dequeueOutputBuffer(bufferInfo, 11000);
         if (index >= 0) {
             ByteBuffer buffer = mMediaCodec.getOutputBuffer(index);
-
-//            Log.i(TAG, "mediaFormat: " + mediaFormat.toString());
-            byte[] outData = new byte[bufferInfo.size];
-            buffer.get(outData);
+//            byte[] outData = new byte[bufferInfo.size];
+//            buffer.get(outData);
             if (startTime == 0) {
                 // 微妙转为毫秒
                 startTime = bufferInfo.presentationTimeUs / 1000;
             }
 
-            if (isWriteFile){
-                if (h264InputStream == null){
-                    h264InputStream = new WriteFileUtil(recordH264Path);
-                    h264InputStream.createfile();
-                }
-                h264InputStream.writeFile(outData);
-            }
+//            if (isWriteFile){
+//                if (h264InputStream == null){
+//                    h264InputStream = new WriteFileUtil(recordH264Path);
+//                    h264InputStream.createfile();
+//                }
+//                h264InputStream.writeFile(outData);
+//            }
 
             if (encoderListener != null){
-                encoderListener.onH264Data(outData);
+                encoderListener.onH264Data(buffer, bufferInfo);
             }
 
 //                包含   分隔符
             mMediaCodec.releaseOutputBuffer(index, false);
         }else if (index == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED){
             MediaFormat mediaFormat = mMediaCodec.getOutputFormat();
+            if (encoderListener != null){
+                encoderListener.onMediaFormatChanged(mediaFormat);
+            }
             Log.i(TAG, "mediaFormat: " + mediaFormat.toString());
         }
+
     }
     public void stop() {
         // 释放
         isStart = false;
+        if (mHandler == null)
+            return ;
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -182,6 +192,13 @@ public class OpenGLAVCEncoder {
                 mHandler = null;
             }
         });
+    }
+
+    public MediaFormat getOutputMediaFormat(){
+        if (mMediaCodec == null)
+            return null;
+
+        return mMediaCodec.getOutputFormat();
     }
 
     public int getmBitrate() {

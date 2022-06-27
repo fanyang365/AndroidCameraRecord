@@ -23,6 +23,7 @@ public class WellcomActivity  extends Activity implements View.OnClickListener {
     private Button      btnCameraTextureView;
     private Button      btnRecord;
     private Button      btnCameraYUV;
+    private Button      btnCameraRGB;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class WellcomActivity  extends Activity implements View.OnClickListener {
         btnCameraYUV   = findViewById(R.id.btnCameraYUV);
         btnCameraOpenGL   = findViewById(R.id.btnCameraOpenGL);
         btnCameraOpenGL2   = findViewById(R.id.btnCameraOpenGL2);
+        btnCameraRGB   = findViewById(R.id.btnCameraRGB);
         btnRecord   = findViewById(R.id.btnRecord);
         btnCamera.setOnClickListener(this);
         btnCameraTextureView.setOnClickListener(this);
@@ -45,6 +47,7 @@ public class WellcomActivity  extends Activity implements View.OnClickListener {
         btnCameraOpenGL2.setOnClickListener(this);
         btnRecord.setOnClickListener(this);
         btnCameraYUV.setOnClickListener(this);
+        btnCameraRGB.setOnClickListener(this);
         permissionInit();
 //        btnCamera2.setVisibility(View.GONE);
 //        btnCameraX.setVisibility(View.GONE);
@@ -77,6 +80,9 @@ public class WellcomActivity  extends Activity implements View.OnClickListener {
                 break;
             case R.id.btnCameraYUV:
                 intent.setClass(WellcomActivity.this, CameraYUVOpenGL.class);
+                break;
+            case R.id.btnCameraRGB:
+                intent.setClass(WellcomActivity.this, CameraRGBActivity.class);
                 break;
         }
         startActivity(intent);

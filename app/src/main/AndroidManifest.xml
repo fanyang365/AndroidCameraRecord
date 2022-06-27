@@ -4,41 +4,41 @@
     android:versionCode="1"
     android:versionName="1.0">
 
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".CameraXActivity">
-
-        </activity>
+        <activity
+            android:name=".CameraRGBActivity"
+            android:screenOrientation="portrait"
+            android:exported="false" />
+        <activity android:name=".CameraXActivity"></activity>
         <activity
             android:name=".TestActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"></activity>
-        <activity android:name=".Camera2Activity">
-
-        </activity>
+            android:screenOrientation="landscape" />
+        <activity android:name=".Camera2Activity"></activity>
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".SurfaceTextureActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".RecordActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".CameraYUVOpenGL"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".WellcomActivity"
             android:label="@string/app_name">
@@ -50,23 +50,10 @@
         </activity>
         <activity
             android:name=".OpenglCameraActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name=".OpenglCameraActivity2"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
     </application>
-
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <uses-feature android:name="android.hardware.camera" />
-
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

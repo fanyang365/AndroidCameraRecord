@@ -38,7 +38,7 @@ public class AACEncoder {
 
     private boolean isAsyMode = true;
 
-    private boolean isAddDTS  = true;
+    private boolean isAddDTS  = false;
 
     private volatile boolean isStart = false;
 
