@@ -1,5 +1,7 @@
 # Mac 忽略文件
 .DS_Store
+app/build
+
 # Built application files
 *.apk
 *.aar
@@ -16,6 +18,9 @@
 bin/
 gen/
 out/
+app/src/main/cpp/ncnn-20220420-android-vulkan
+app/src/main/cpp/OpenCV-android-sdk
+
 #  Uncomment the following line in case you need and you don't have the release build type files in your app
 # release/
 
