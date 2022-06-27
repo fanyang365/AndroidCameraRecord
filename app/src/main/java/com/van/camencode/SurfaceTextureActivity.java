@@ -2,6 +2,8 @@ package com.van.camencode;
 
 import android.app.Activity;
 import android.graphics.SurfaceTexture;
+import android.media.Image;
+import android.media.ImageReader;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
@@ -11,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 
 
+import com.van.ncnn.NcnnYoloFace;
+import com.van.opencv.YUVData;
 import com.van.util.Camera2Helper;
 import com.van.util.CameraHelper;
 import com.van.util.MediaRecordUtil;
@@ -27,6 +31,7 @@ public class SurfaceTextureActivity extends Activity implements TextureView.Surf
     private Button btnRecord;
     private MediaRecordUtil mediaRecordUtil;
     private SurfaceView surface;
+    private NcnnYoloFace ncnnyoloface = new NcnnYoloFace();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,6 +39,7 @@ public class SurfaceTextureActivity extends Activity implements TextureView.Surf
         setContentView(R.layout.activity_surface_texture);
         findView();
         init();
+        reload();
     }
 
     private void findView(){
@@ -42,10 +48,47 @@ public class SurfaceTextureActivity extends Activity implements TextureView.Surf
         btnRecord.setOnClickListener(this);
     }
 
+    private YUVData yuvData;
     private void init(){
         cameraHelper    = new Camera2Helper(this);
         textureView.setSurfaceTextureListener(this);
+        cameraHelper.setOnImageAvailableListener(new ImageReader.OnImageAvailableListener() {
+            @Override
+            public void onImageAvailable(ImageReader reader) {
 
+
+                Image image = reader.acquireNextImage();
+                if (image == null) {
+                    return;
+                }
+                byte[] rawData = Camera2Helper.getImageData(image, Camera2Helper.NV21);
+                if (ncnnyoloface != null){
+//                    ncnnyoloface.detectorImage(reader);
+                    if (yuvData == null)
+                        yuvData = new YUVData();
+                    yuvData.setData(rawData);
+                    yuvData.setCameraFacing(0);
+                    yuvData.setCameraOrientation(cameraHelper.getCameraOrientation());
+                    yuvData.setWidth(640);
+                    yuvData.setHeight(480);
+                    ncnnyoloface.detector(yuvData);
+
+                }
+                image.close();
+            }
+        });
+    }
+
+
+    private void reload()
+    {
+        int current_model = 0;
+        int current_cpugpu = 0;
+        boolean ret_init = ncnnyoloface.loadModel(this.getAssets(), current_model, current_cpugpu);
+        if (!ret_init)
+        {
+            Log.e("MainActivity", "ncnnyoloface loadModel failed");
+        }
     }
 
     @Override

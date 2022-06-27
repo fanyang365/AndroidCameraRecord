@@ -124,6 +124,8 @@ public class YUVCameraRender2 implements GLSurfaceView.Renderer, Camera.PreviewC
             return ;
         int id;
         synchronized (object) {
+            if (mYUVBuffer == null)
+                return ;
             id = cameraYUVFilter.draw(textures[0], false, mYUVBuffer);
         }
         id      = waterFilter.onDraw(id, false);
@@ -143,10 +145,12 @@ public class YUVCameraRender2 implements GLSurfaceView.Renderer, Camera.PreviewC
 
             if (mYUVBuffer == null){
                 mYUVBuffer  = new byte[data.length];
+                Log.d(TAG, "mYUVBuffer new byte ");
             }
 
             if (mYUVBuffer.length != data.length){
                 mYUVBuffer  = new byte[data.length];
+                Log.d(TAG, "mYUVBuffer new byte2 ");
             }
             System.arraycopy(data, 0, mYUVBuffer, 0, data.length);
         }
@@ -159,7 +163,7 @@ public class YUVCameraRender2 implements GLSurfaceView.Renderer, Camera.PreviewC
         m_preview_rate++;
         if ((current_time_stamp-m_last_time_stamp) >= 1000)
         {
-//            Log.i("Test", "当前帧率="+m_preview_rate+",timestamp="+current_time_stamp+",时间差:"+(current_time_stamp-m_last_time_stamp));
+            Log.i(TAG, "当前帧率="+m_preview_rate+",timestamp="+current_time_stamp+",时间差:"+(current_time_stamp-m_last_time_stamp));
             m_last_time_stamp 	= current_time_stamp;
             m_preview_rate		= 0;
         }

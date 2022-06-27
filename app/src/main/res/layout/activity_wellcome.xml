@@ -74,5 +74,13 @@
         android:text="CameraYUV">
 
     </Button>
+    <Button
+        android:textAllCaps="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnCameraRGB"
+        android:text="CameraRGB人脸识别马赛克">
+
+    </Button>
 
 </LinearLayout>

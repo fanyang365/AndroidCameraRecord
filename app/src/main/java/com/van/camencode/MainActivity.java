@@ -60,6 +60,7 @@ import com.hjq.permissions.XXPermissions;
 import com.van.util.WriteFileUtil;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback, PreviewCallback, OnClickListener{
+	private static final String TAG = "MainActivity";
 	public SurfaceView mPreview;
 	public SurfaceHolder mHolder;
 
@@ -594,6 +595,9 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback, Pr
 		try 
 		{
 			mCamera = Camera.open(0);
+			Camera.CameraInfo info = new Camera.CameraInfo();
+			Camera.getCameraInfo (1 , info);
+			Log.d(TAG, "info.orientation = " + info.orientation);
 //			mCamera.setDisplayOrientation(90);
 			mCamera.setPreviewDisplay(mHolder);
 			Camera.Parameters parameters = mCamera.getParameters();
@@ -718,7 +722,10 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback, Pr
 		if (mEncoder != null)
 		{
 			ImageUtil.rotate(data, preview_width, preview_height, cameraOrientationdata, 0);
+			long time1	= System.currentTimeMillis();
 			int et = mEncoder.encode(cameraOrientationdata , 0 , m_camera_preview_size, buffer1, 0);
+			long time2	= System.currentTimeMillis();
+			Log.d(TAG, "编码1帧用时 = " + (time2 - time1));
 //			//缓存sps和pps
 			if ((buffer1[4] & 0x1F) == 7){
 				sps_data	= new byte[et];

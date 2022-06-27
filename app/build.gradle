@@ -6,12 +6,24 @@ android {
 
     defaultConfig {
         applicationId "com.bunchen.camencode"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
         }
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++14"
+//                abiFilters 'armeabi-v7a'
+                arguments "-DANDROID_STL=c++_shared"
+//                arguments "-DANDROID_STL=gnustl_static"
+            }
+
+        }
+//        ndk {
+//            abiFilters 'armeabi-v7a'
+//        }
     }
 
     buildTypes {
@@ -20,6 +32,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.10.2'
+        }
+    }
+
 }
 
 dependencies {

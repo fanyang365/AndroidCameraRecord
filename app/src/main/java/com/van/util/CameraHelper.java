@@ -318,13 +318,13 @@ public class CameraHelper extends CameraAbstract{
                     }
 
                     Camera.Size CurpreSize = params.getPreviewSize();
-                    if (cameraOrientation == 90 || cameraOrientation == 270){
-                        camera_video_width	= CurpreSize.height;
-                        camera_video_height	= CurpreSize.width;
-                    }else{
-                        camera_video_width	= CurpreSize.width;
-                        camera_video_height	= CurpreSize.height;
-                    }
+//                    if (cameraOrientation == 90 || cameraOrientation == 270){
+//                        camera_video_width	= CurpreSize.height;
+//                        camera_video_height	= CurpreSize.width;
+//                    }else{
+//                        camera_video_width	= CurpreSize.width;
+//                        camera_video_height	= CurpreSize.height;
+//                    }
                     Log.i("Test", "2.当前选择的分辨率:camera_video_width="+camera_video_width+", camera_video_height="+camera_video_height);
 
                     Log.i("Test", "设置偏转角度："+cameraOrientation);
@@ -415,6 +415,7 @@ public class CameraHelper extends CameraAbstract{
                 degrees = 270;
                 break;
         }
+        Log.d(TAG, "info.orientation = " + info.orientation);
         int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             result = (info.orientation + degrees) % 360;

@@ -2,6 +2,8 @@ package com.van.camencode;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaCodec;
+import android.media.MediaFormat;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.widget.RelativeLayout;
 
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import androidx.annotation.Nullable;
@@ -28,6 +31,7 @@ public class OpenglCameraActivity2 extends Activity implements View.OnClickListe
     private CameraSurface cameraSurface;
     private Button          btnCameraFacing;
     private Button          btnReset;
+//    private Button          btnYUV;
     private Button btnRecord;
     private SurfaceView     decodeSurface;
     private AvcDecoder      avcDecoder;
@@ -48,8 +52,10 @@ public class OpenglCameraActivity2 extends Activity implements View.OnClickListe
         mainRel = findViewById(R.id.mainRel);
         btnReset = findViewById(R.id.btnReset);
         decodeSurface   = findViewById(R.id.decodeSurface);
+//        btnYUV   = findViewById(R.id.btnYUV);
         btnCameraFacing = findViewById(R.id.btnCameraFacing);
         btnCameraFacing.setOnClickListener(this);
+//        btnYUV.setOnClickListener(this);
         btnReset.setOnClickListener(this);
         btnRecord   = findViewById(R.id.btnRecord);
         btnRecord.setOnClickListener(this);
@@ -69,6 +75,16 @@ public class OpenglCameraActivity2 extends Activity implements View.OnClickListe
 
     private volatile  boolean isStop  = false;
 
+    @Override
+    public void onH264Data(ByteBuffer buffer, MediaCodec.BufferInfo info) {
+
+    }
+
+    @Override
+    public void onMediaFormatChanged(MediaFormat mediaFormat) {
+
+    }
+
     private class DecodeThread implements Runnable{
 
         @Override
@@ -78,8 +94,11 @@ public class OpenglCameraActivity2 extends Activity implements View.OnClickListe
                     byte[] data = dataQueue.take();
                     if (avcDecoder != null && isSurfaceCreated){
 //                        Log.d(TAG, "DecodeThread 111 size = "+dataQueue.size());
+                        long time1  = System.currentTimeMillis();
                         avcDecoder.decode(data, 0, data.length, null, 0);
 //                        Log.d(TAG, "DecodeThread 222 size = "+dataQueue.size());
+                        long time2  = System.currentTimeMillis();
+                        Log.d(TAG, "解码耗时 = " + (time2 - time1));
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -120,8 +139,6 @@ public class OpenglCameraActivity2 extends Activity implements View.OnClickListe
         switch (v.getId()){
             case R.id.btnCameraFacing:
                 cameraSurface.cameraFacingChanged();
-//                Intent intent = new Intent(OpenglCameraActivity2.this, WellcomActivity.class);
-//                startActivity(intent);
                 break;
             case R.id.btnRecord:
                 record();
@@ -165,11 +182,11 @@ public class OpenglCameraActivity2 extends Activity implements View.OnClickListe
         stopDecode();
     }
 
-    @Override
-    public void onH264Data(byte[] data) {
-//        if (avcDecoder != null && isSurfaceCreated){
-//            avcDecoder.decode(data, 0, data.length, null, 0);
-//        }
-        dataQueue.add(data);
-    }
+//    @Override
+//    public void onH264Data(byte[] data) {
+////        if (avcDecoder != null && isSurfaceCreated){
+////            avcDecoder.decode(data, 0, data.length, null, 0);
+////        }
+//        dataQueue.add(data);
+//    }
 }

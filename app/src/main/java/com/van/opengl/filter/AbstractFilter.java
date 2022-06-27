@@ -94,7 +94,7 @@ public class AbstractFilter {
 //        opengl  fbo  有 1   没有  2
 //View 的大小
         GLES20.glViewport(0, 0, mWidth, mHeight);
-        Log.d("fileter", "width="+mWidth + ", height="+mHeight);
+//        Log.d("fileter", "width="+mWidth + ", height="+mHeight);
 //        使用程序
         GLES20.glUseProgram(program);
 //        从索引位0的地方读

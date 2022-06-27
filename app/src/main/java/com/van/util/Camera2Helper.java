@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -27,6 +28,7 @@ import android.util.Range;
 import android.util.Size;
 import android.view.Surface;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -201,10 +203,16 @@ public class Camera2Helper extends CameraAbstract{
                 mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                         rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth,
                         maxPreviewHeight, largest);
+                largest         = new Size(640, 480);
                 mPreviewSize    = largest;
 
                 if (onPreviewSizeListener != null) {
                     onPreviewSizeListener.onSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+                }
+
+                if (onImageAvailableListener != null){
+                    imageReader = ImageReader.newInstance(mPreviewSize.getWidth(), mPreviewSize.getHeight(), ImageFormat.YUV_420_888, 2);
+                    imageReader.setOnImageAvailableListener(onImageAvailableListener, mBackgroundHandler);
                 }
 
 //                imageReader = ImageReader.newInstance(mPreviewSize.getWidth(), mPreviewSize.getHeight(), ImageFormat.YUV_420_888, 2);
@@ -348,7 +356,12 @@ public class Camera2Helper extends CameraAbstract{
             // We set up a CaptureRequest.Builder with the output Surface.
             mPreviewRequestBuilder
                     = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            List<Surface> lists = new ArrayList<>();
             mPreviewRequestBuilder.addTarget(surface);
+            if (imageReader != null && onImageAvailableListener != null){
+                mPreviewRequestBuilder.addTarget(imageReader.getSurface());
+                lists.add(imageReader.getSurface());
+            }
 //            mPreviewRequestBuilder.addTarget(imageReader.getSurface());
 //            mPreviewRequestBuilder.addTarget(mSurface);
             // 设置预览画面的帧率 视实际情况而定选择一个帧率范围
@@ -360,7 +373,9 @@ public class Camera2Helper extends CameraAbstract{
             Log.i("Test", "设置帧率范围 = " + fpsRanges[i].getLower() +" ~ "+fpsRanges[i].getUpper());
 
             // Here, we create a CameraCaptureSession for camera preview.
-            mCameraDevice.createCaptureSession(Arrays.asList(surface),
+
+            lists.add(surface);
+            mCameraDevice.createCaptureSession(lists,
                     new CameraCaptureSession.StateCallback() {
 
                         @Override
@@ -497,7 +512,7 @@ public class Camera2Helper extends CameraAbstract{
                     return false;
                 }
             }
-            manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
+            manager.openCamera("1", mStateCallback, mBackgroundHandler);
             return true;
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -542,6 +557,17 @@ public class Camera2Helper extends CameraAbstract{
 
     public long				m_last_time_stamp 	= System.currentTimeMillis();
     public int				m_preview_rate		= 0;
+
+    private ImageReader.OnImageAvailableListener onImageAvailableListener;
+
+    public ImageReader.OnImageAvailableListener getOnImageAvailableListener() {
+        return onImageAvailableListener;
+    }
+
+    public void setOnImageAvailableListener(ImageReader.OnImageAvailableListener onImageAvailableListener) {
+        this.onImageAvailableListener = onImageAvailableListener;
+    }
+
     private ImageReader.OnImageAvailableListener mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
@@ -631,5 +657,96 @@ public class Camera2Helper extends CameraAbstract{
 
     public interface OnPreviewListener {
         void onPreviewFrame(byte[] data, int len);
+    }
+
+
+    public static final int I420 = 35;
+    public static final int NV21 = 17;
+
+    public static boolean supportedImageFormat(Image image) {
+        int var1 = image.getFormat();
+        switch(var1) {
+            case NV21:
+            case I420:
+            case 842094169:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static byte[] getImageData(Image image, int imageFormat) {
+        if (imageFormat != I420 && imageFormat != NV21) {
+            throw new IllegalArgumentException("only support COLOR_FormatI420 and COLOR_FormatNV21");
+        } else if (!supportedImageFormat(image)) {
+            throw new RuntimeException("can't convert Image to byte array, format " + image.getFormat());
+        } else {
+            Rect var2 = image.getCropRect();
+            int var3 = image.getFormat();
+            int var4 = var2.width();
+            int var5 = var2.height();
+            android.media.Image.Plane[] var6 = image.getPlanes();
+            byte[] var7 = new byte[var4 * var5 * ImageFormat.getBitsPerPixel(var3) / 8];
+            byte[] var8 = new byte[var6[0].getRowStride()];
+            int var9 = 0;
+            byte var10 = 1;
+
+            for(int var11 = 0; var11 < var6.length; ++var11) {
+                switch(var11) {
+                    case 0:
+                        var9 = 0;
+                        var10 = 1;
+                        break;
+                    case 1:
+                        if (imageFormat == I420) {
+                            var9 = var4 * var5;
+                            var10 = 1;
+                        } else if (imageFormat == NV21) {
+                            var9 = var4 * var5 + 1;
+                            var10 = 2;
+                        }
+                        break;
+                    case 2:
+                        if (imageFormat == I420) {
+                            var9 = (int)((double)(var4 * var5) * 1.25D);
+                            var10 = 1;
+                        } else if (imageFormat == NV21) {
+                            var9 = var4 * var5;
+                            var10 = 2;
+                        }
+                }
+
+                ByteBuffer var12 = var6[var11].getBuffer();
+                int var13 = var6[var11].getRowStride();
+                int var14 = var6[var11].getPixelStride();
+                int var15 = var11 == 0 ? 0 : 1;
+                int var16 = var4 >> var15;
+                int var17 = var5 >> var15;
+                var12.position(var13 * (var2.top >> var15) + var14 * (var2.left >> var15));
+
+                for(int var18 = 0; var18 < var17; ++var18) {
+                    int var19;
+                    if (var14 == 1 && var10 == 1) {
+                        var19 = var16;
+                        var12.get(var7, var9, var16);
+                        var9 += var16;
+                    } else {
+                        var19 = (var16 - 1) * var14 + 1;
+                        var12.get(var8, 0, var19);
+
+                        for(int var20 = 0; var20 < var16; ++var20) {
+                            var7[var9] = var8[var20 * var14];
+                            var9 += var10;
+                        }
+                    }
+
+                    if (var18 < var17 - 1) {
+                        var12.position(var12.position() + var13 - var19);
+                    }
+                }
+            }
+
+            return var7;
+        }
     }
 }

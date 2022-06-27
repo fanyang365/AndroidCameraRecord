@@ -95,7 +95,7 @@ public class CameraYUVFilter2 extends AbstractFboFilter{
         mUVBuffer = ByteBuffer.allocateDirect(mWidth * mHeight / 2)
                 .order(ByteOrder.nativeOrder());
 
-        Log.d(TAG, "width="+mWidth+", height="+mHeight);
+//        Log.d(TAG, "width="+mWidth+", height="+mHeight);
     }
 
 

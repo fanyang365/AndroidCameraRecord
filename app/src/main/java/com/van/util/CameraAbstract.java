@@ -28,7 +28,7 @@ public abstract class CameraAbstract {
     protected volatile int				camera_video_height = 1080;//默认高度
     /*视频显示的texture*/
     protected SurfaceTexture surfaceTexture;
-    protected int				frameRate			= 30;
+    protected int				frameRate			= 26;
     protected int				currentCameraDeflection;//本地摄像头偏转角度
     protected int				cameraOrientation;//传输给服务器的摄像头旋转参数，摄像头编码数据时用。
     protected int				currentdefinition;			//当前清晰度

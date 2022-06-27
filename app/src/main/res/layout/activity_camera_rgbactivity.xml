@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".CameraRGBActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        >
+
+        <android.opengl.GLSurfaceView
+            android:id="@+id/glSurfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.opengl.GLSurfaceView>
+
+        <TextView
+            android:textColor="#FF0000"
+            android:id="@+id/textFPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </RelativeLayout>
+    
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <Button
+            android:id="@+id/btnCameraFacing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="切换">
+
+        </Button>
+
+        <Button
+            android:id="@+id/btnRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开始录像">
+
+        </Button>
+
+        <Button
+            android:id="@+id/btnReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重新生成录像">
+
+        </Button>
+
+    </LinearLayout>
+</LinearLayout>

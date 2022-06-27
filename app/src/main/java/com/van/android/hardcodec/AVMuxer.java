@@ -129,7 +129,8 @@ public class AVMuxer {
 
     public synchronized boolean addMuxerData(MuxerData data){
         if (mediaMuxer == null || !isLooper){
-            throw new RuntimeException("混合器未初始化完成。");
+            return false;
+//            throw new RuntimeException("混合器未初始化完成。");
         }
         if (!isAudioAdd || !isVideoAdd)
             return false;
